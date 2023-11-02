@@ -31,21 +31,28 @@
 
 package org.sample;
 
+import okhttp3.UnixDomainSocketFactory;
+import java.io.File;
 import java.io.IOException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import org.openjdk.jmh.annotations.Benchmark;
 
 public class MyBenchmark {
 
-    private static final ProcessBuilder processBuilder = new ProcessBuilder(System.getProperty("command").split(" "));
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+        .socketFactory(new UnixDomainSocketFactory(new File("/Users/kevink/Development/jetty-poc/junix-ingress.sock")))
+        .build();
+    private static final Request request = new Request.Builder().url("http://localhost/process").build();
 
     @Benchmark
     public void testMethod() throws IOException {
-        Process process = processBuilder.start();
-        String output = new String(process.getInputStream().readAllBytes());
-        if (!output.contains("hello")){
-            throw new RuntimeException("Didn't get expected output: " + output);
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.body().string().contains("hello")){
+                throw new RuntimeException("Didn't get expected output: " + response.body().string());
+            }
         }
-        process.destroy();
     }
 
 }
