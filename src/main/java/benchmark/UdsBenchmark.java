@@ -29,9 +29,10 @@
  * THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.sample;
+package benchmark;
 
-import okhttp3.UnixDomainSocketFactory;
+import okhttp3.JnrUnixDomainSocketFactory;
+import okhttp3.JunixUnixDomainSocketFactory;
 import java.io.File;
 import java.io.IOException;
 import okhttp3.OkHttpClient;
@@ -40,17 +41,18 @@ import okhttp3.Response;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Threads;
 
-public class MyBenchmark {
+public class UdsBenchmark {
 
     private static final OkHttpClient nativeClient = new OkHttpClient.Builder()
-        .socketFactory(new UnixDomainSocketFactory(new File("/tmp/native-ingress.sock")))
+        .socketFactory(new JunixUnixDomainSocketFactory(new File("/tmp/native-ingress.sock")))
         .build();
     private static final OkHttpClient jnrClient = new OkHttpClient.Builder()
-        .socketFactory(new UnixDomainSocketFactory(new File("/tmp/jnr-ingress.sock")))
+        .socketFactory(new JunixUnixDomainSocketFactory(new File("/tmp/jnr-ingress.sock")))
         .build();
     private static final OkHttpClient junixClient = new OkHttpClient.Builder()
-        .socketFactory(new UnixDomainSocketFactory(new File("/tmp/junix-ingress.sock")))
+        .socketFactory(new JunixUnixDomainSocketFactory(new File("/tmp/junix-ingress.sock")))
         .build();
+
     private static final OkHttpClient httpClient = new OkHttpClient.Builder()
         .build();
 

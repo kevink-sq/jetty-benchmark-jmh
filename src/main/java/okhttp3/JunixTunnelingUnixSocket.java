@@ -14,12 +14,12 @@ import java.util.Set;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 import org.newsclub.net.unix.AFUNIXSocketChannel;
 
-final class TunnelingUnixSocket extends Socket {
+final class JunixTunnelingUnixSocket extends Socket {
   private final AFUNIXSocketAddress socketAddress;
   private final AFUNIXSocketChannel socketChannel;
   private InetSocketAddress inetAddress;
 
-  TunnelingUnixSocket(AFUNIXSocketAddress socketAddress, AFUNIXSocketChannel socketChannel) {
+  JunixTunnelingUnixSocket(AFUNIXSocketAddress socketAddress, AFUNIXSocketChannel socketChannel) {
     this.socketAddress = socketAddress;
     this.socketChannel = socketChannel;
   }
